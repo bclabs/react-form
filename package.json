@@ -1,6 +1,6 @@
 {
   "name": "@brllnt/react-form",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "main": "./lib/index.js",
   "jsnext:main": "./src/index.js",
   "scripts": {
@@ -15,7 +15,7 @@
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
-    "url": "http://git.brllnt.co/bclabs/brllnt-form.git"
+    "url": "https://github.com/bclabs/react-form.git"
   },
   "devDependencies": {
     "babel-cli": "^6.6.5",
