@@ -2,6 +2,10 @@
 
 Simple form component for React applications. This component is very much in alpha and the API will be changing rapidly.
 
+## Installation
+
+`npm install @brllnt/react-form`
+
 ## Usage
 
 ```javascript
