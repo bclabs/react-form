@@ -63,7 +63,7 @@ class Form extends React.Component {
     }
 }
 
-export const Field = ({ name, type = 'text', onChange, component = 'input', children, ...rest }) => (
+export const Field = ({ type = 'text', onChange, component = 'input', children, ...rest }) => (
     React.createElement(component, { 
         type,
         onChange: e => onChange(e.target.value),
