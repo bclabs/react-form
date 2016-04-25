@@ -1,20 +1,20 @@
-class Form extends React.Component {
+import React, { Component } from 'react'
+
+export const Field = ({ type = 'text', onChange, component = 'input', children, ...rest }) => (
+    React.createElement(component, {
+        type,
+        onChange: e => onChange(e.target ? e.target.value : e),
+        ...rest
+    }, children)
+)
+
+class Form extends Component {
     constructor(props) {
         super(props)
         this.state = {
             values: {}
         }
     }
-
-    // Prevent default if this is an event and submit if onSubmit exists
-    handleSubmit = e => {
-        const { onSubmit } = this.props
-        const { values } = this.state
-
-        e && e.preventDefault()
-
-        onSubmit && onSubmit(values)
-    };
 
     // Update internal state on each field's onChange event, also call out to the form's onChange
     // prop if that was provided too
@@ -34,6 +34,16 @@ class Form extends React.Component {
         onChange && onChange(newValues)
     };
 
+    // Prevent default if this is an event and submit if onSubmit exists
+    handleSubmit = e => {
+        const { onSubmit } = this.props
+        const { values } = this.state
+
+        e && e.preventDefault()
+
+        onSubmit && onSubmit(values)
+    };
+
     render() {
         const { children } = this.props
         const { values } = this.state
@@ -46,10 +56,12 @@ class Form extends React.Component {
             }
 
             // Make the value equal to the initialValue if it exists or just use what's in state
-            const value = (values[child.props.name] !== undefined) ?  values[child.props.name] : (child.props.initialValue || '')
+            const value = (values[child.props.name] !== undefined) ?
+                values[child.props.name] :
+                (child.props.initialValue || '')
 
             // Extend the Field with the new props (aka clone it)
-            return React.cloneElement(child, { 
+            return React.cloneElement(child, {
                 onChange: this.onFieldChange(child.props.name),
                 value
             })
@@ -62,13 +74,5 @@ class Form extends React.Component {
         )
     }
 }
-
-export const Field = ({ type = 'text', onChange, component = 'input', children, ...rest }) => (
-    React.createElement(component, { 
-        type,
-        onChange: e => onChange(e.target ? e.target.value : e),
-        ...rest
-    }, children)
-)
 
 export default Form
