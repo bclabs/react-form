@@ -1,9 +1,45 @@
 import React, { Component } from 'react'
 
+const recursiveCloneChildren = (children, onFieldChange, values) => (
+    React.Children.map(children, child => {
+        var childProps = {};
+
+        if (React.isValidElement(child) && child.type === Field) {
+            const value = (values[child.props.name] !== undefined) ?
+                values[child.props.name] :
+                (child.props.initialValue || '')
+
+            childProps = {
+                onChange: onFieldChange(child.props.name),
+                value
+            }
+        }
+
+        if (child.props) {
+            // String has no Prop
+            childProps.children = recursiveCloneChildren(child.props.children, onFieldChange, values);
+            return React.cloneElement(child, childProps);
+        }
+
+        return child;
+    })
+)
+
+const extractValue = (e) => {
+    if (e.target) {
+        if (e.target.type === 'checkbox') {
+            return e.target.checked
+        }
+        return e.target.value
+    }
+
+    return e
+}
+
 export const Field = ({ type = 'text', onChange, component = 'input', children, ...rest }) => (
     React.createElement(component, {
         type,
-        onChange: e => onChange(e.target ? e.target.value : e),
+        onChange: e => onChange(extractValue(e)),
         ...rest
     }, children)
 )
@@ -45,30 +81,14 @@ class Form extends Component {
     };
 
     render() {
-        const { children } = this.props
+        const { children, onChange, ...rest } = this.props
         const { values } = this.state
 
         // Loop through Fields and add onChange and value props
-        const childrenWithOnChange = React.Children.map(children, (child) => {
-            // Only do this stuff if it's a Field
-            if (child.type !== Field) {
-                return child
-            }
-
-            // Make the value equal to the initialValue if it exists or just use what's in state
-            const value = (values[child.props.name] !== undefined) ?
-                values[child.props.name] :
-                (child.props.initialValue || '')
-
-            // Extend the Field with the new props (aka clone it)
-            return React.cloneElement(child, {
-                onChange: this.onFieldChange(child.props.name),
-                value
-            })
-        })
+        const childrenWithOnChange = recursiveCloneChildren(children, this.onFieldChange, values)
 
         return (
-            <form onSubmit={this.handleSubmit}>
+            <form {...rest} onSubmit={this.handleSubmit}>
                 {childrenWithOnChange}
             </form>
         )
