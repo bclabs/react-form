@@ -36,13 +36,26 @@ const extractValue = (e) => {
     return e
 }
 
-export const Field = ({ type = 'text', onChange, component = 'input', children, ...rest }) => (
-    React.createElement(component, {
-        type,
-        onChange: e => onChange(extractValue(e)),
-        ...rest
-    }, children)
-)
+export class Field extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+
+    focus() {
+        this.input.focus()
+    }
+
+    render() {
+        const { type = 'text', onChange, component = 'input', children, ...rest } = this.props
+
+        return React.createElement(component, {
+            ref: c => this.input = c,
+            type,
+            onChange: e => onChange(extractValue(e)),
+            ...rest
+        }, children)
+    }
+}
 
 class Form extends Component {
     constructor(props) {
