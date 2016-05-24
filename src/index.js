@@ -15,7 +15,7 @@ const recursiveCloneChildren = (children, onFieldChange, values) => (
             }
         }
 
-        if (child.props) {
+        if (child && child.props) {
             // String has no Prop
             childProps.children = recursiveCloneChildren(child.props.children, onFieldChange, values);
             return React.cloneElement(child, childProps);
