@@ -46,7 +46,7 @@ export class Field extends React.Component {
     }
 
     render() {
-        const { type = 'text', onChange, component = 'input', children, ...rest } = this.props
+        const { type = 'text', initialValue, onChange, component = 'input', children, ...rest } = this.props
 
         return React.createElement(component, {
             ref: c => this.input = c,
